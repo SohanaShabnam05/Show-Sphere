@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: discovery-service
+
+# Use another port if 8761 is in use: set SERVER_PORT=8762 or -Dserver.port=8762
+server:
+  port: ${SERVER_PORT:8761}
+
+eureka:
+  instance:
+    # Avoid "UnknownHostException: ??" on Windows when hostname cannot be resolved
+    hostname: ${EUREKA_HOSTNAME:localhost}
+    prefer-ip-address: false
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${EUREKA_HOSTNAME:localhost}:${SERVER_PORT:8761}/eureka
+  server:
+    enable-self-preservation: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
