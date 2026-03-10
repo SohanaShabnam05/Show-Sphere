@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Manage Events - BookMyShow</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+  <h1 class="page-title">Events</h1>
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+  <p class="mb-2"><a th:href="@{/admin/events/create}" class="btn btn-primary">Add Event</a></p>
+  <div class="mb-3">
+    <label for="eventSearch" class="form-label">Search events (by name or category)</label>
+    <input type="text" id="eventSearch" class="form-control" placeholder="Type to filter..."/>
+  </div>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Base Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="eventsTableBody">
+        <tr th:each="e : ${eventsPage.content}" th:data-name="${e.name}" th:data-category="${e.category}">
+          <td th:text="${e.id}"></td>
+          <td th:text="${e.name}"></td>
+          <td th:text="${e.category}"></td>
+          <td>₹<span th:text="${e.basePrice}"></span></td>
+          <td>
+            <a th:href="@{/admin/events/view/{id}(id=${e.id})}" class="btn btn-outline btn-sm">View</a>
+            <form th:action="@{/admin/events/delete/{id}(id=${e.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this event?');">
+              <button type="submit" class="btn btn-outline btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:if="${#lists.isEmpty(eventsPage.content)}" class="card">
+    <p>No events found. <a th:href="@{/admin/events/create}">Add Event</a></p>
+  </div>
+  <div th:if="${eventsPage.totalPages > 1}" class="mt-2">
+    <a th:if="${currentPage > 0}" th:href="@{/admin/events(page=${currentPage - 1}, size=${size})}" class="btn btn-outline btn-sm">Previous</a>
+    <span class="mx-2">Page <span th:text="${currentPage + 1}"></span> of <span th:text="${eventsPage.totalPages}"></span></span>
+    <a th:if="${currentPage < eventsPage.totalPages - 1}" th:href="@{/admin/events(page=${currentPage + 1}, size=${size})}" class="btn btn-outline btn-sm">Next</a>
+  </div>
+  <a th:href="@{/admin/dashboard}" class="btn btn-primary mt-2">Dashboard</a>
+</div>
+<script>
+(function() {
+  var input = document.getElementById('eventSearch');
+  var tbody = document.getElementById('eventsTableBody');
+  if (!input || !tbody) return;
+  input.addEventListener('input', function() {
+    var q = (this.value || '').trim().toLowerCase();
+    var rows = tbody.querySelectorAll('tr');
+    rows.forEach(function(tr) {
+      var name = (tr.getAttribute('data-name') || '').toLowerCase();
+      var category = (tr.getAttribute('data-category') || '').toLowerCase();
+      var show = !q || name.indexOf(q) !== -1 || category.indexOf(q) !== -1;
+      tr.style.display = show ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

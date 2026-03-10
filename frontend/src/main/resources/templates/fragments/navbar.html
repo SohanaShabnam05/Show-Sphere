@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <title></title>
+</head>
+<body>
+<nav class="navbar" th:fragment="navbar">
+  <div class="container">
+    <a th:href="@{/home}" class="navbar-brand">BookMyShow</a>
+    <ul class="nav-links">
+      <!-- Not logged in -->
+      <li sec:authorize="!isAuthenticated()">
+        <a th:href="@{/home}">Home</a>
+      </li>
+      <li sec:authorize="!isAuthenticated()">
+        <a th:href="@{/login}">Login</a>
+      </li>
+      <li sec:authorize="!isAuthenticated()">
+        <a th:href="@{/register}">Register</a>
+      </li>
+
+      <!-- Logged in as USER -->
+      <li sec:authorize="hasRole('USER')">
+        <a th:href="@{/home}">Home</a>
+      </li>
+      <li sec:authorize="hasRole('USER')">
+        <a th:href="@{/browse}">Browse Events</a>
+      </li>
+      <li sec:authorize="hasRole('USER')">
+        <a th:href="@{/bookings/my}">My Bookings</a>
+      </li>
+      <li sec:authorize="hasRole('USER')">
+        <a th:href="@{/bookings/my/upcoming}">Upcoming</a>
+      </li>
+      <li sec:authorize="hasRole('USER')">
+        <a th:href="@{/bookings/my/past}">Past</a>
+      </li>
+      <li sec:authorize="hasRole('USER')">
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+          <button type="submit" class="btn btn-outline" style="color:white;border-color:white;background:transparent;">Logout</button>
+        </form>
+      </li>
+
+      <!-- Logged in as ADMIN -->
+      <li sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+      </li>
+      <li sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin/events}">Events</a>
+      </li>
+      <li sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin/shows}">Shows</a>
+      </li>
+      <li sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin/theaters}">Theaters</a>
+      </li>
+      <li sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin/coupons}">Coupons</a>
+      </li>
+      <li sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin/reports}">Reports</a>
+      </li>
+      <li sec:authorize="hasRole('ADMIN')">
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+          <button type="submit" class="btn btn-outline" style="color:white;border-color:white;background:transparent;">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>
+</body>
+</html>

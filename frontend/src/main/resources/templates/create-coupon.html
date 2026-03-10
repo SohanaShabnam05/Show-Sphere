@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Create Coupon - BookMyShow</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+  <h1 class="page-title">Add Coupon</h1>
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+  <p class="mb-2"><a th:href="@{/admin/coupons}" class="btn btn-outline">View all Coupons</a></p>
+  <div class="card" style="max-width: 500px;">
+    <form th:action="@{/admin/coupons/create}" method="post">
+      <div class="form-group">
+        <label for="code">Coupon Code</label>
+        <input type="text" id="code" name="code" class="form-control" th:value="${code}" required/>
+      </div>
+      <div class="form-group">
+        <label for="discountType">Discount Type</label>
+        <select id="discountType" name="discountType" class="form-control" required>
+          <option value="PERCENTAGE" th:selected="${discountType == 'PERCENTAGE'}">PERCENTAGE</option>
+          <option value="FLAT" th:selected="${discountType == 'FLAT'}">FLAT</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="discountValue">Discount Value</label>
+        <input type="number" id="discountValue" name="discountValue" step="0.01" min="0" class="form-control" th:value="${discountValue}" required/>
+      </div>
+      <div class="form-group">
+        <label for="validFrom">Valid From (yyyy-MM-dd)</label>
+        <input type="date" id="validFrom" name="validFrom" class="form-control" th:value="${validFrom}" required/>
+      </div>
+      <div class="form-group">
+        <label for="validTo">Expiry Date (Valid To)</label>
+        <input type="date" id="validTo" name="validTo" class="form-control" th:value="${validTo}" required/>
+      </div>
+      <div class="form-group">
+        <label for="eventCategory">Applicable Event Type (optional)</label>
+        <select id="eventCategory" name="eventCategory" class="form-control">
+          <option value="" th:selected="${eventCategory == null or eventCategory == ''}">-- Any --</option>
+          <option value="MOVIE" th:selected="${eventCategory == 'MOVIE'}">MOVIE</option>
+          <option value="CONCERT" th:selected="${eventCategory == 'CONCERT'}">CONCERT</option>
+          <option value="LIVE_SHOW" th:selected="${eventCategory == 'LIVE_SHOW'}">LIVE_SHOW</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="maxRedemptions">Usage Limit (optional)</label>
+        <input type="number" id="maxRedemptions" name="maxRedemptions" min="1" class="form-control" th:value="${maxRedemptions}" placeholder="Max redemptions"/>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <a th:href="@{/admin/coupons}" class="btn btn-outline">Back to Coupons</a>
+    </form>
+  </div>
+</div>
+</body>
+</html>

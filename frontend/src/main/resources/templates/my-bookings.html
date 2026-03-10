@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>My Bookings - BookMyShow</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+  <h1 class="page-title">My Bookings</h1>
+  <div th:if="${cancelResponse == null and success != null}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${cancelResponse}" class="alert alert-success">
+    <strong>Cancellation completed.</strong>
+    <span th:if="${cancelResponse.refundAmount != null}"> Refund: ₹<span th:text="${cancelResponse.refundAmount}"></span></span>
+    <span th:if="${cancelResponse.gstRefunded != null}"> (GST refunded: ₹<span th:text="${cancelResponse.gstRefunded}"></span>)</span>
+    <span th:if="${cancelResponse.message}" th:text="' ' + ${cancelResponse.message}"></span>
+  </div>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item"><a class="nav-link" th:classappend="${activeTab == 'all' or activeTab == null} ? 'active'" th:href="@{/bookings/my}">All</a></li>
+    <li class="nav-item"><a class="nav-link" th:classappend="${activeTab == 'upcoming'} ? 'active'" th:href="@{/bookings/my/upcoming}">Upcoming</a></li>
+    <li class="nav-item"><a class="nav-link" th:classappend="${activeTab == 'past'} ? 'active'" th:href="@{/bookings/my/past}">Past</a></li>
+  </ul>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>Show / Event</th>
+          <th>Seats</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="b : ${bookings}">
+          <td th:text="${b.id}"></td>
+          <td th:text="${b.eventId}">Event</td>
+          <td th:text="${b.numberOfSeats}"></td>
+          <td>₹<span th:text="${b.totalAmount}"></span></td>
+          <td>
+            <span th:if="${b.status == 'CANCELLED'}" class="badge bg-success">Cancel confirmed</span>
+            <span th:if="${b.status == 'PARTIAL_CANCELLED'}" class="badge" style="background-color:#fd7e14; color:white">Partial cancel</span>
+            <span th:if="${b.status == 'CONFIRMED'}" class="badge bg-primary" th:text="${b.status}"></span>
+            <span th:if="${b.status != null and b.status != 'CANCELLED' and b.status != 'PARTIAL_CANCELLED' and b.status != 'CONFIRMED'}" class="badge bg-secondary" th:text="${b.status}"></span>
+          </td>
+          <td th:text="${b.bookingTime}"></td>
+          <td>
+            <a th:href="@{/bookings/{id}(id=${b.id})}" class="btn btn-outline-primary btn-sm">View Details</a>
+            <a th:href="@{/bookings/cancel/{id}(id=${b.id})}" class="btn btn-warning btn-sm" th:if="${b.status == 'CONFIRMED' || b.status == 'PARTIAL_CANCELLED'}" title="Opens form to choose how many seats to cancel; refund is calculated by the backend">Cancel</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p th:if="${!#lists.isEmpty(bookings)}" class="text-muted small mt-2">Click <strong>Cancel</strong> to open a form where you choose how many seats to cancel. Refund (and GST) are calculated by the booking service and shown after you confirm.</p>
+  <div th:if="${#lists.isEmpty(bookings)}" class="card">
+    <p>No bookings found.</p>
+    <a th:href="@{/browse}" class="btn btn-primary">Browse Events</a>
+  </div>
+</div>
+</body>
+</html>

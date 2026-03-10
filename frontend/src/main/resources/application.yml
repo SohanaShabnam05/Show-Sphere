@@ -1,0 +1,41 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: frontend
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+
+# Backend API (gateway) - use same port as api-gateway (default 8888 when gateway runs on 8888)
+backend:
+  api:
+    base-url: ${BACKEND_GATEWAY_URL:http://localhost:8888}
+
+# Optional: when gateway is down, frontend will retry register/login directly to auth-service (default 8081)
+auth:
+  service:
+    direct-url: ${AUTH_SERVICE_URL:http://localhost:8081}
+
+# Optional: when gateway returns 404 for events, frontend will retry event/shows APIs directly to event-service (default 8083)
+event:
+  service:
+    direct-url: ${EVENT_SERVICE_URL:http://localhost:8083}
+
+# Optional: when gateway returns 404 for coupons, frontend will retry coupon APIs directly to coupon-service (default 8085)
+coupon:
+  service:
+    direct-url: ${COUPON_SERVICE_URL:http://localhost:8085}
+
+# Optional: when gateway returns 404 for reports, frontend will retry booking report API directly to booking-service (default 8084)
+booking:
+  service:
+    direct-url: ${BOOKING_SERVICE_URL:http://localhost:8084}
+
+# JWT (same secret as gateway/auth for token parsing)
+jwt:
+  secret: ${JWT_SECRET:BookMyShowAuthServiceSecretKeyForJWTTokenGenerationMustBeLongEnough}
+  cookie-name: BMS_TOKEN

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Admin Dashboard - BookMyShow</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+  <h1 class="page-title">Admin Dashboard</h1>
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div class="dashboard-grid">
+    <a th:href="@{/admin/events}" class="dashboard-btn">Events</a>
+    <a th:href="@{/admin/shows}" class="dashboard-btn">Shows</a>
+    <a th:href="@{/admin/theaters}" class="dashboard-btn">Theaters</a>
+    <a th:href="@{/admin/coupons}" class="dashboard-btn">Coupons</a>
+    <a th:href="@{/admin/reports}" class="dashboard-btn">Reports</a>
+  </div>
+  <p class="text-muted small mt-2">Events, Shows, Coupons: view all, add new, view details, delete (events). Theaters: create and view.</p>
+</div>
+</body>
+</html>

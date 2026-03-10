@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Coupon Details - BookMyShow</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+  <h1 class="page-title">Coupon Details</h1>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+  <div th:if="${coupon}" class="card">
+    <div class="card-body">
+      <p><strong>ID:</strong> <span th:text="${coupon.id}"></span></p>
+      <p><strong>Code:</strong> <span th:text="${coupon.code}"></span></p>
+      <p><strong>Discount type:</strong> <span th:text="${coupon.discountType}"></span></p>
+      <p><strong>Discount value:</strong> <span th:text="${coupon.discountValue}"></span></p>
+      <p><strong>Valid from:</strong> <span th:text="${coupon.validFrom}"></span></p>
+      <p><strong>Valid to:</strong> <span th:text="${coupon.validTo}"></span></p>
+      <p><strong>Status:</strong>
+        <span th:if="${coupon.expired == true}" class="badge bg-danger">Expired</span>
+        <span th:if="${coupon.expired != true}" class="badge bg-success">Active</span>
+        <span class="text-muted small">(Expired when past valid-to date or when redemptions reach max.)</span>
+      </p>
+      <p><strong>Event category:</strong> <span th:text="${coupon.eventCategory}"></span></p>
+      <p><strong>Redemptions:</strong> <span th:text="${coupon.redemptionCount != null ? coupon.redemptionCount : 0}"></span> / <span th:text="${coupon.maxRedemptions != null ? coupon.maxRedemptions : 'unlimited'}"></span></p>
+    </div>
+  </div>
+  <a th:href="@{/admin/coupons}" class="btn btn-primary">Back to Coupons</a>
+</div>
+</body>
+</html>

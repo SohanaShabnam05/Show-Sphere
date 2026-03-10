@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Coupons - BookMyShow</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+  <h1 class="page-title">Coupons</h1>
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+  <p class="mb-2"><a th:href="@{/admin/coupons/create}" class="btn btn-primary">Add Coupon</a></p>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Code</th>
+          <th>Type</th>
+          <th>Value</th>
+          <th>Valid From</th>
+          <th>Valid To</th>
+          <th>Status</th>
+          <th>Category</th>
+          <th>Redemptions</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="c : ${coupons}">
+          <td th:text="${c.id}"></td>
+          <td th:text="${c.code}"></td>
+          <td th:text="${c.discountType}"></td>
+          <td th:text="${c.discountValue}"></td>
+          <td th:text="${c.validFrom}"></td>
+          <td th:text="${c.validTo}"></td>
+          <td>
+            <span th:if="${c.expired == true}" class="badge bg-danger">Expired</span>
+            <span th:if="${c.expired != true}" class="badge bg-success">Active</span>
+          </td>
+          <td th:text="${c.eventCategory}"></td>
+          <td th:text="${c.redemptionCount != null ? c.redemptionCount + ' / ' + (c.maxRedemptions != null ? c.maxRedemptions : '-') : '-'}"></td>
+          <td>
+            <a th:href="@{/admin/coupons/view/{id}(id=${c.id})}" class="btn btn-outline btn-sm">View</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:if="${#lists.isEmpty(coupons)}" class="card">
+    <p>No coupons found. <a th:href="@{/admin/coupons/create}">Add Coupon</a></p>
+  </div>
+  <a th:href="@{/admin/dashboard}" class="btn btn-primary mt-2">Dashboard</a>
+</div>
+</body>
+</html>

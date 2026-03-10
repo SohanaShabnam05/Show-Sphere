@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Theater Details - BookMyShow</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+  <h1 class="page-title">Theater Details</h1>
+  <div th:if="${theater}" class="card">
+    <p><strong>ID:</strong> <span th:text="${theater.id}"></span></p>
+    <p><strong>Name:</strong> <span th:text="${theater.name}"></span></p>
+    <p><strong>Address:</strong> <span th:text="${theater.address}"></span></p>
+    <a th:href="@{/admin/theaters}" class="btn btn-primary">Back to Theaters</a>
+  </div>
+</div>
+</body>
+</html>
