@@ -1,0 +1,42 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: coupon-service
+  datasource:
+    url: jdbc:mysql://mysql:3306/bookmyshow_coupon
+    username: root
+    password: rootpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+server:
+  port: ${SERVER_PORT:8085}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+
+jwt:
+  secret: ${JWT_SECRET:BookMyShowAuthServiceSecretKeyForJWTTokenGenerationMustBeLongEnough}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    # SpringDoc 3.x serves UI at /swagger-ui/index.html; redirect from /swagger-ui.html is in SwaggerRedirectController
+    path: /swagger-ui/index.html
